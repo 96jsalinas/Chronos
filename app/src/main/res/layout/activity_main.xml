@@ -7,14 +7,14 @@
     tools:context="com.example.a96jsa.chronos.MainActivity">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/record"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="116dp"
         android:layout_marginTop="40dp"
         android:text="Start recording"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/category" />
 
     <TextView
         android:id="@+id/textView"
@@ -30,10 +30,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/category"
         android:layout_width="wrap_content"
         android:layout_height="43dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="148dp"
         android:ems="10"
         android:inputType="textPersonName"
