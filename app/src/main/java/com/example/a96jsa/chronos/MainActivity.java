@@ -1,6 +1,7 @@
 package com.example.a96jsa.chronos;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.SystemClock;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -32,6 +33,14 @@ public class MainActivity extends AppCompatActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_apps_black_24dp);
 
+        Dbhelper dbhelper = new Dbhelper(getApplicationContext());
+        SQLiteDatabase db = dbhelper.getWritableDatabase();
+
+        if(db != null){
+            Toast.makeText(this, "database created", Toast.LENGTH_LONG).show();
+        }else {
+            Toast.makeText(this, "database not created", Toast.LENGTH_LONG).show();
+        }
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
