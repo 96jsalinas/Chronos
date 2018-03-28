@@ -18,6 +18,10 @@ public class Dbhelper extends SQLiteOpenHelper {
     }
     static {
         cupboard().register(Activity.class);
+        cupboard().register(Sport.class);
+        cupboard().register(Leisure.class);
+        cupboard().register(Housework.class);
+        cupboard().register(Work.class);
     }
 
 
