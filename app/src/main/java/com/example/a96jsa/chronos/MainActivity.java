@@ -20,11 +20,13 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean recording = false;
     private DrawerLayout mDrawerLayout;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        databaseHelper = new DatabaseHelper(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
