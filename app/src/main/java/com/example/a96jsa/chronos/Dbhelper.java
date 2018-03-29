@@ -1,5 +1,6 @@
 package com.example.a96jsa.chronos;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -12,7 +13,7 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 public class Dbhelper extends SQLiteOpenHelper {
     private static String DATABASE_NAME = "chronos_database";
-    private static int DATABASE_VERSION = 1;
+    private static int DATABASE_VERSION = 2;
     public Dbhelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -30,5 +31,10 @@ public class Dbhelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion , int newVersion) {
         cupboard().withDatabase(db).upgradeTables();
+
+//        if(newVersion == 2) {
+//            ContentValues cv = new ContentValues();
+//            cv.put("categoryName","Default category");
+//        }
     }
 }

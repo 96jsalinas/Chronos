@@ -1,6 +1,7 @@
 package com.example.a96jsa.chronos;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.SystemClock;
 import android.support.design.widget.NavigationView;
@@ -28,11 +29,13 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean recording = false;
     private DrawerLayout mDrawerLayout;
-     private SQLiteDatabase db;
+    private SQLiteDatabase db;
+    private int recordedTime;
 
-    @BindView(R.id.add_category) Button add_category_button;
+
     @BindView(R.id.category) EditText category;
-    @BindView(R.id.remove_category) EditText remove_category_et;
+    @BindView(R.id.add_activity) Button add_activity;
+    @BindView(R.id.activity) EditText activity;
    // final EditText category = findViewById(R.id.category);
 
     @Override
@@ -90,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
                 }else {
                     simpleChronometer.stop();
                     long elapsedMillis = SystemClock.elapsedRealtime() - simpleChronometer.getBase();
-                    int seconds = (int)elapsedMillis/1000;
+                    //data type int
+                    recordedTime = (int)elapsedMillis/1000;
                     Toast toast = Toast.makeText(getApplicationContext(), "Elapsed time (ms): " + elapsedMillis, Toast.LENGTH_SHORT);
                     toast.show();
                     recording = false;
@@ -114,17 +118,26 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick(R.id.add_category)
-    public void addCategory(){
-        String categoryName = category.getText().toString();
-        Toast.makeText(getApplicationContext(),categoryName,Toast.LENGTH_LONG).show();
-        Activity activity = new Activity(categoryName);
-        cupboard().withDatabase(db).put(activity);
-        Toast.makeText(getApplicationContext(),"data written in database",Toast.LENGTH_LONG).show();
+    @OnClick(R.id.add_activity)
+    public void addActivity(){
+
+        String activityName = category.getText().toString().toLowerCase();
+        String categoryName = activity.getText().toString().toLowerCase();
+        Activity query = cupboard().withDatabase(db).query(Activity.class).withSelection("activityName = ?", activityName).get();
+
+        if(query == null){
+            Toast.makeText(getApplicationContext(),activityName,Toast.LENGTH_SHORT).show();
+            Activity activity = new Activity(activityName,categoryName,recordedTime);
+            cupboard().withDatabase(db).put(activity);
+            Toast.makeText(getApplicationContext(),"data written in database",Toast.LENGTH_LONG).show();
+        }else {
+            Toast.makeText(getApplicationContext(),"category already exists in database",Toast.LENGTH_SHORT).show();
+        }
+
 
     }
-    @OnClick(R.id.get_category)
-    public void getCategory(){
+    @OnClick(R.id.get_activity)
+    public void getActivity(){
         try{
             Activity result = cupboard().withDatabase(db).query(Activity.class).get();
             Toast.makeText(getApplicationContext(),result.getActivityName(),Toast.LENGTH_LONG).show();
@@ -137,9 +150,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    @OnClick(R.id.remove_category_button)
-    public void removeCategory(){
-        String query = remove_category_et.getText().toString();
+    @OnClick(R.id.remove_activity)
+    public void removeActivity(){
+        String query = activity.getText().toString();
         if(query.isEmpty()){
             Toast.makeText(getApplicationContext(),query + " specify which category you want to remove",Toast.LENGTH_LONG).show();
         }else {
