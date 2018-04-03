@@ -2,9 +2,11 @@ package com.example.a96jsa.chronos;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -41,6 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public final static String Leisure_COL1 = "ID";
     public final static String Leisure_COL2 = "leisureType";
 
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
 
@@ -64,12 +67,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ACTIVITY_TABLE);
-        onCreate(sqLiteDatabase);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SPORT_TABLE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WORK_TABLE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + HOUSEWORK_TABLE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + LEISURE_TABLE);
-
+        onCreate(sqLiteDatabase);
     }
 
     public void insertActivityData(String activityName, String starTime, String endTime, String totalTime, String date){
@@ -109,6 +111,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(Leisure_COL2, leisureType);
         sqLiteOpenHelper.insert(LEISURE_TABLE, null, contentValues);
+    }
+
+    public ArrayList<String> showPossibleActivities (String type){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        //Get results from query and save them in a cursor
+        Cursor res = sqLiteDatabase.rawQuery("select * from" + type, null);
+
+        //Transform Cursor into ArrayList with type String
+        ArrayList<String> possibleActivityResultList = new ArrayList<String>();
+        while (res.moveToNext()){
+            //Cursor starts counting at 0, since the name of the activity is saved at the
+            // second position of the table it has to be 1
+            possibleActivityResultList.add(res.getString(1));
+        }
+        return possibleActivityResultList;
     }
 }
 
