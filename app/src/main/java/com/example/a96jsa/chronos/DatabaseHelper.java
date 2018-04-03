@@ -26,22 +26,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //Sport table
     public final static String SPORT_TABLE = "Sport";
     public final static String Sport_COL1 = "ID";
-    public final static String Sport_COL2 = "sportType";
+    public final static String Sport_COL2 = "Type";
 
     //Work table
     public final static String WORK_TABLE = "Work";
     public final static String Work_COL1 = "ID";
-    public final static String Work_COL2 = "workType";
+    public final static String Work_COL2 = "Type";
 
     //Housework table
     public final static String HOUSEWORK_TABLE = "Housework";
     public final static String Housework_COL1 = "ID";
-    public final static String Housework_COL2 = "houseworkType";
+    public final static String Housework_COL2 = "Type";
 
     //Leisure table
     public final static String LEISURE_TABLE = "Leisure";
     public final static String Leisure_COL1 = "ID";
-    public final static String Leisure_COL2 = "leisureType";
+    public final static String Leisure_COL2 = "Type";
 
 
     public DatabaseHelper(Context context) {
@@ -54,13 +54,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("create table "+ ACTIVITY_TABLE +"(ID INTEGER PRIMARY KEY AUTOINCREMENT, activityName TEXT, " +
                 "startTime TEXT, endTime TEXT, totalTime TEXT, date TEXT)");
 
-        sqLiteDatabase.execSQL("create table "+ SPORT_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, sportType TEXT)");
+        sqLiteDatabase.execSQL("create table "+ SPORT_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
 
-        sqLiteDatabase.execSQL("create table "+ WORK_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, workType TEXT)");
+        sqLiteDatabase.execSQL("create table "+ WORK_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
 
-        sqLiteDatabase.execSQL("create table "+ HOUSEWORK_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, houseworkType TEXT)");
+        sqLiteDatabase.execSQL("create table "+ HOUSEWORK_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
 
-        sqLiteDatabase.execSQL("create table "+ LEISURE_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, leisureType TEXT)");
+        sqLiteDatabase.execSQL("create table "+ LEISURE_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
 
     }
 
@@ -73,6 +73,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + LEISURE_TABLE);
         onCreate(sqLiteDatabase);
     }
+
+    //Insert methods for specific categories have to be separated for now because of variable naming.
+    //Will be changed later, when it will be possible to add more general categories
 
     public void insertActivityData(String activityName, String starTime, String endTime, String totalTime, String date){
         SQLiteDatabase sqLiteOpenHelper = this.getWritableDatabase();
@@ -113,6 +116,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteOpenHelper.insert(LEISURE_TABLE, null, contentValues);
     }
 
+    //Show possible activities for a specific category
     public ArrayList<String> showPossibleActivities (String type){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
@@ -127,6 +131,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             possibleActivityResultList.add(res.getString(1));
         }
         return possibleActivityResultList;
+    }
+
+
+
+    //Delete types of activities for a specific category
+    public void deleteTypeData (String tableName, String Type){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.delete(tableName, "type = ?", new String[] {Type});
     }
 }
 
