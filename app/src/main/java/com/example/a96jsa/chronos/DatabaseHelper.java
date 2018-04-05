@@ -1,5 +1,6 @@
 package com.example.a96jsa.chronos;
 
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -10,6 +11,15 @@ import java.util.ArrayList;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+
+    /*
+
+
+    * The methods will return the Boolean value true in order to make it possible to make
+    * Toast notifications to indicate for the user if the requested task was successful
+
+
+     */
 
     public final static String DATABASE_NAME = "Chronos.db";
 
@@ -56,7 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL("create table "+ SPORT_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
 
-        sqLiteDatabase.execSQL("create table "+ WORK_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
+        sqLiteDatabase.execSQL("create table "+ WORK_TABLE + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
 
         sqLiteDatabase.execSQL("create table "+ HOUSEWORK_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
 
@@ -68,7 +78,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ACTIVITY_TABLE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SPORT_TABLE);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WORK_TABLE);
+        sqLiteDatabase.execSQL(" DROP TABLE IF EXISTS " + WORK_TABLE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + HOUSEWORK_TABLE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + LEISURE_TABLE);
         onCreate(sqLiteDatabase);
@@ -135,10 +145,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
+    //Update types for specific category
+    public boolean updateTypeData (String tableName, String oldName, String newName){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        //Get id from activity type so it can be updated
+        String id = String.valueOf(sqLiteDatabase.rawQuery("select ID from" + tableName + "where Type = ?", new String[] {oldName} ));
+
+        //Update name
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("ID", id);
+        contentValues.put("Type", newName);
+        sqLiteDatabase.update(tableName, contentValues, "ID = ?", new String[]{id});
+
+
+        return true;
+    }
+
     //Delete types of activities for a specific category
-    public void deleteTypeData (String tableName, String Type){
+    public boolean deleteTypeData (String tableName, String Type){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         sqLiteDatabase.delete(tableName, "type = ?", new String[] {Type});
+
+        return true;
     }
 }
 
