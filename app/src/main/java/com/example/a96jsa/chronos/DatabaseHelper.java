@@ -21,40 +21,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
      */
 
-    public final static String DATABASE_NAME = "Chronos.db";
+    private final static String DATABASE_NAME = "Chronos.db";
 
    //Activity table
-    public final static String ACTIVITY_TABLE = "Activity";
-    public final static String Acitivity_COL1 = "ID";
-    public final static String Activity_COL2 = "activityName";
-    public final static String Activity_COL3 = "startTime";
-    public final static String Activity_COL4 = "endTime";
-    public final static String Activity_COL5 = "totalTime";
-    public final static String Activity_COL6 = "date";
+    private final static String ACTIVITY_TABLE = "Activity";
+    private final static String Acitivity_COL1 = "ID";
+    private final static String Activity_COL2 = "activityName";
+    private final static String Activity_COL3 = "startTime";
+    private final static String Activity_COL4 = "endTime";
+    private final static String Activity_COL5 = "totalTime";
+    private final static String Activity_COL6 = "date";
 
+    //Category table
+    private final static String CATEGORY_TABLE = "Category";
 
     //Sport table
-    public final static String SPORT_TABLE = "Sport";
-    public final static String Sport_COL1 = "ID";
-    public final static String Sport_COL2 = "Type";
+    private final static String SPORT_TABLE = "Sport";
 
     //Work table
-    public final static String WORK_TABLE = "Work";
-    public final static String Work_COL1 = "ID";
-    public final static String Work_COL2 = "Type";
+    private final static String WORK_TABLE = "Work";
 
     //Housework table
-    public final static String HOUSEWORK_TABLE = "Housework";
-    public final static String Housework_COL1 = "ID";
-    public final static String Housework_COL2 = "Type";
+    private final static String HOUSEWORK_TABLE = "Housework";
 
     //Leisure table
-    public final static String LEISURE_TABLE = "Leisure";
-    public final static String Leisure_COL1 = "ID";
-    public final static String Leisure_COL2 = "Type";
+    private final static String LEISURE_TABLE = "Leisure";
 
 
-    public DatabaseHelper(Context context) {
+
+    DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
 
     }
@@ -63,6 +58,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("create table "+ ACTIVITY_TABLE +"(ID INTEGER PRIMARY KEY AUTOINCREMENT, activityName TEXT, " +
                 "startTime TEXT, endTime TEXT, totalTime TEXT, date TEXT)");
+
+        sqLiteDatabase.execSQL("create table "+ CATEGORY_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
 
         sqLiteDatabase.execSQL("create table "+ SPORT_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
 
@@ -74,8 +71,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + CATEGORY_TABLE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ACTIVITY_TABLE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SPORT_TABLE);
         sqLiteDatabase.execSQL(" DROP TABLE IF EXISTS " + WORK_TABLE);
@@ -84,10 +83,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    //Insert methods for specific categories have to be separated for now because of variable naming.
-    //Will be changed later, when it will be possible to add more general categories
-
-    public void insertActivityData(String activityName, String starTime, String endTime, String totalTime, String date){
+    //Insert activity values
+    private boolean insertActivityData(String activityName, String starTime, String endTime, String totalTime, String date){
         SQLiteDatabase sqLiteOpenHelper = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(Activity_COL2, activityName);
@@ -95,43 +92,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(Activity_COL4, endTime);
         contentValues.put(Activity_COL5, totalTime);
         contentValues.put(Activity_COL6, date);
-        sqLiteOpenHelper.insert(ACTIVITY_TABLE, null, contentValues);
+        //insert returns -1 if it failed, so it is possible to check this way if it did work
+        long result = sqLiteOpenHelper.insert(ACTIVITY_TABLE, null, contentValues);
+
+        if (result == -1){
+            return false;
+        }else{
+            return true;
+        }
+
     }
 
-    public void insertSportTypes (String sportType){
-    SQLiteDatabase sqLiteOpenHelper = this.getWritableDatabase();
-    ContentValues contentValues = new ContentValues();
-    contentValues.put(Sport_COL2, sportType);
-    sqLiteOpenHelper.insert(SPORT_TABLE, null, contentValues);
-    }
-
-    public void insertWorkTypes (String workType){
+    //Insert category specific types, this methods needs also be called when a new category is created
+    private boolean insertCategoryTypes (String tableName, String typeName){
         SQLiteDatabase sqLiteOpenHelper = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(Work_COL2, workType);
-        sqLiteOpenHelper.insert(WORK_TABLE, null, contentValues);
+        contentValues.put("Type", typeName);
+        long result = sqLiteOpenHelper.insert(tableName, null, contentValues);
+        if (result == -1){
+            return false;
+        }else{
+            return true;
+        }
     }
 
-    public void insertHouseworkTypes (String houseworkType){
-        SQLiteDatabase sqLiteOpenHelper = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(Housework_COL2, houseworkType);
-        sqLiteOpenHelper.insert(HOUSEWORK_TABLE, null, contentValues);
+    //Generate table for new category
+    private boolean createCategoryTable(String categoryName){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.execSQL("create table "+ categoryName + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
+        sqLiteDatabase.close();
+        return true;
     }
 
-    public void insertLeisureTypes (String leisureType){
-        SQLiteDatabase sqLiteOpenHelper = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(Leisure_COL2, leisureType);
-        sqLiteOpenHelper.insert(LEISURE_TABLE, null, contentValues);
-    }
 
-    //Show possible activities for a specific category
-    public ArrayList<String> showPossibleActivities (String type){
+    //Show possible activities or categories
+    private ArrayList<String> showPossibleActivities (String tableName){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
         //Get results from query and save them in a cursor
-        Cursor res = sqLiteDatabase.rawQuery("select * from" + type, null);
+        Cursor res = sqLiteDatabase.rawQuery("select * from" + tableName, null);
 
         //Transform Cursor into ArrayList with type String
         ArrayList<String> possibleActivityResultList = new ArrayList<String>();
@@ -146,7 +145,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     //Update types for specific category
-    public boolean updateTypeData (String tableName, String oldName, String newName){
+    private boolean updateTypeData (String tableName, String oldName, String newName){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         //Get id from activity type so it can be updated
         String id = String.valueOf(sqLiteDatabase.rawQuery("select ID from" + tableName + "where Type = ?", new String[] {oldName} ));
@@ -161,10 +160,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    //Delete types of activities for a specific category
-    public boolean deleteTypeData (String tableName, String Type){
+    //Delete types of activities / Category
+    private boolean deleteData (String tableName, String Name){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        sqLiteDatabase.delete(tableName, "type = ?", new String[] {Type});
+        sqLiteDatabase.delete(tableName, "type = ?", new String[] {Name});
+
+        return true;
+    }
+
+    //Delete category table
+    private boolean deleteCategory(String tableName){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.execSQL(" DROP TABLE IF EXISTS " + tableName);
 
         return true;
     }
