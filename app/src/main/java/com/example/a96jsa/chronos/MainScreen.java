@@ -41,8 +41,19 @@ public class MainScreen extends AppCompatActivity {
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         // set item as selected to persist highlight
                         menuItem.setChecked(true);
-                        Intent homeIntent = new Intent(getBaseContext(),MainScreen.class);
-                        startActivity(homeIntent);
+
+                        int id = menuItem.getItemId();
+                        if(id == R.id.dynamic_text_example){
+                            Intent dynIntent = new Intent(getBaseContext(),ExampleDynamicText.class);
+                            startActivity(dynIntent);
+                        }else{
+                            Intent homeIntent = new Intent(getBaseContext(),MainScreen.class);
+                            startActivity(homeIntent);
+                        }
+
+                        mDrawerLayout.closeDrawers();
+                        //Intent homeIntent = new Intent(getBaseContext(),MainScreen.class);
+                        //startActivity(homeIntent);
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
 

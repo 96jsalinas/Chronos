@@ -3,7 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android" >
     <group android:checkableBehavior="single"></group>
     <item
-        android:id="@+id/nav_camera"
+        android:id="@+id/main_activity"
         android:icon="@android:drawable/ic_menu_view"
         android:title="Main activity" />
+    <item
+        android:id="@+id/dynamic_text_example"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="Dynamic text example" />
+
 </menu>
