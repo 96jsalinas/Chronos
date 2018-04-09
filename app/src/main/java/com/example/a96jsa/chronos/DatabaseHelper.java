@@ -69,6 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL("create table "+ LEISURE_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
 
+        sqLiteDatabase.execSQL("insert into " + CATEGORY_TABLE + "( Type ) values (Sport, Work, Housework, Leisure)" );
     }
 
 
@@ -85,7 +86,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Insert activity values
     private boolean insertActivityData(String activityName, String starTime, String endTime, String totalTime, String date){
-        SQLiteDatabase sqLiteOpenHelper = this.getWritableDatabase();
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(Activity_COL2, activityName);
         contentValues.put(Activity_COL3, starTime);
@@ -93,7 +94,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(Activity_COL5, totalTime);
         contentValues.put(Activity_COL6, date);
         //insert returns -1 if it failed, so it is possible to check this way if it did work
-        long result = sqLiteOpenHelper.insert(ACTIVITY_TABLE, null, contentValues);
+        long result = sqLiteDatabase.insert(ACTIVITY_TABLE, null, contentValues);
 
         if (result == -1){
             return false;
