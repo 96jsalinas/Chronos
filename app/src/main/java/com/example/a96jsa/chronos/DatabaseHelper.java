@@ -84,6 +84,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
+    public ArrayList<String> getCategories(){
+        return this.showPossibleActivities(CATEGORY_TABLE);
+    }
+
+    public ArrayList<String> getActivities(String category){
+        return this.showPossibleActivities(category);
+    }
+
     //Insert activity values
     public boolean insertActivityData(String activityName, String starTime, String endTime, String totalTime, String date){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
@@ -176,5 +184,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return true;
     }
+
+
+
 }
 
