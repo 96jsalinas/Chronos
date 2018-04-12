@@ -85,7 +85,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Insert activity values
-    private boolean insertActivityData(String activityName, String starTime, String endTime, String totalTime, String date){
+    public boolean insertActivityData(String activityName, String starTime, String endTime, String totalTime, String date){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(Activity_COL2, activityName);
@@ -105,7 +105,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Insert category specific types, this methods needs also be called when a new category is created
-    private boolean insertCategoryTypes (String tableName, String typeName){
+    public boolean insertCategoryTypes (String tableName, String typeName){
         SQLiteDatabase sqLiteOpenHelper = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("Type", typeName);
@@ -118,7 +118,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Generate table for new category
-    private boolean createCategoryTable(String categoryName){
+    public boolean createCategoryTable(String categoryName){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         sqLiteDatabase.execSQL("create table "+ categoryName + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
         sqLiteDatabase.close();
@@ -127,7 +127,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     //Show possible activities or categories
-    private ArrayList<String> showPossibleActivities (String tableName){
+    public ArrayList<String> showPossibleActivities (String tableName){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
         //Get results from query and save them in a cursor
@@ -146,7 +146,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     //Update types for specific category
-    private boolean updateTypeData (String tableName, String oldName, String newName){
+    public boolean updateTypeData (String tableName, String oldName, String newName){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         //Get id from activity type so it can be updated
         String id = String.valueOf(sqLiteDatabase.rawQuery("select ID from" + tableName + "where Type = ?", new String[] {oldName} ));
@@ -162,7 +162,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Delete types of activities / Category
-    private boolean deleteData (String tableName, String Name){
+    public boolean deleteData (String tableName, String Name){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         sqLiteDatabase.delete(tableName, "type = ?", new String[] {Name});
 
@@ -170,7 +170,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Delete category table
-    private boolean deleteCategory(String tableName){
+    public boolean deleteCategory(String tableName){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         sqLiteDatabase.execSQL(" DROP TABLE IF EXISTS " + tableName);
 
