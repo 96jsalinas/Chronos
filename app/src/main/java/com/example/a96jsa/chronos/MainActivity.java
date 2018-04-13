@@ -93,11 +93,19 @@ public class MainActivity extends AppCompatActivity {
         storeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // databaseHelper.createCategoryTable(category.getText().toString());
+                String category = "Transport";
+               boolean check = databaseHelper.checkCategory(category);
                // databaseHelper.insertCategoryTypes("Category", category.getText().toString());
                // databaseHelper.deleteCategory(category.getText().toString());
-                databaseHelper.updateTypeData("Category", "Work", "Random");
+               // databaseHelper.updateTypeData("Category", "Work", "Random");
                 //databaseHelper.insertActivityData("Swimming", "17:00", "18:00", "45", "12.04.18");
+                if (check == true){
+                    Toast toast = Toast.makeText(getApplicationContext(), "Category " +category+" is created", Toast.LENGTH_LONG);
+                    toast.show();
+                } else {
+                    Toast toast = Toast.makeText(getApplicationContext(), "The category " +category+"  already exists", Toast.LENGTH_LONG);
+                    toast.show();
+                }
 
             }
         });

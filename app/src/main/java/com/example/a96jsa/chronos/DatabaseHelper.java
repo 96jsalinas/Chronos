@@ -124,6 +124,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
         }
     }
+    //Check if category exists already exists
+    public boolean checkCategory (String categoryName){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        Cursor res = sqLiteDatabase.rawQuery("select * from " + CATEGORY_TABLE, null);
+        ArrayList<String> categories = new ArrayList<String>();
+        while (res.moveToNext()){
+            categories.add(res.getString(1));
+        }
+        if (categories.contains(categoryName)){
+            return false;
+        }
+        else {
+            createCategoryTable(categoryName);
+            insertCategoryTypes(CATEGORY_TABLE, categoryName);
+        }
+        return true;
+    }
 
     //Generate table for new category
     public boolean createCategoryTable(String categoryName){
