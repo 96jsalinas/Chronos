@@ -69,7 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL("create table "+ LEISURE_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
 
-        sqLiteDatabase.execSQL("insert into " + CATEGORY_TABLE + "( Type ) values (Sport, Work, Housework, Leisure)" );
+       // sqLiteDatabase.execSQL("insert into " + CATEGORY_TABLE + "( Type ) values (Sport, Work, Housework, Leisure)" );
     }
 
 
@@ -133,20 +133,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-
+    public ArrayList<String> getCategories(){
+        return this.showPossibleActivities(CATEGORY_TABLE);
+    }
     //Show possible activities or categories
-    public ArrayList<String> showPossibleActivities (String tableName){
+   public ArrayList<String> showPossibleActivities (String tableName){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
         //Get results from query and save them in a cursor
-        Cursor res = sqLiteDatabase.rawQuery("select * from" + tableName, null);
+        Cursor res = sqLiteDatabase.rawQuery("select * from " + tableName, null);
 
         //Transform Cursor into ArrayList with type String
         ArrayList<String> possibleActivityResultList = new ArrayList<String>();
         while (res.moveToNext()){
             //Cursor starts counting at 0, since the name of the activity is saved at the
             // second position of the table it has to be 1
-            possibleActivityResultList.add(res.getString(1));
+            possibleActivityResultList.add(res.toString());
         }
         return possibleActivityResultList;
     }
@@ -184,8 +186,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return true;
     }
-
-
-
 }
 

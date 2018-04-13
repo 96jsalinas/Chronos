@@ -6,6 +6,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -16,11 +17,16 @@ import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private boolean recording = false;
     private DrawerLayout mDrawerLayout;
     private DatabaseHelper databaseHelper;
+    private Button storeButton;
+    private String buffer;
+    private Button showCategories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +89,36 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        storeButton = findViewById(R.id.storeData);
+        storeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               // databaseHelper.createCategoryTable(category.getText().toString());
+               // databaseHelper.insertCategoryTypes("Category", category.getText().toString());
+               // databaseHelper.deleteCategory(category.getText().toString());
+               // databaseHelper.updateTypeData("Category", "yesyes", category.getText().toString());
+                databaseHelper.insertActivityData("Swimming", "17:00", "18:00", "45", "12.04.18");
+            }
+        });
+
+        showCategories = findViewById(R.id.showCategories);
+        showCategories.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               ArrayList <String> arrayList = databaseHelper.showPossibleActivities("Activity");
+                buffer = arrayList.toString();
+                showMessage(buffer);
+            }
+        });
 
     }
+    public void showMessage(String Message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
 
+        builder.setMessage(Message);
+        builder.show();
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
