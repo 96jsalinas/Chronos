@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import java.util.ArrayList;
 
 
@@ -69,8 +68,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL("create table "+ LEISURE_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
 
-       // sqLiteDatabase.execSQL("insert into " + CATEGORY_TABLE + "( Type ) values (Sport, Work, Housework, Leisure)" );
+        sqLiteDatabase.execSQL("INSERT or replace INTO Category (Type) VALUES('Sport')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Category (Type) VALUES('Work')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Category (Type) VALUES('Housework')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Category (Type) VALUES('Leisure')");
     }
+
+
 
 
     @Override
@@ -82,10 +86,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + HOUSEWORK_TABLE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + LEISURE_TABLE);
         onCreate(sqLiteDatabase);
-    }
-
-    public ArrayList<String> getCategories(){
-        return this.showPossibleActivities(CATEGORY_TABLE);
     }
 
     public ArrayList<String> getActivities(String category){
@@ -148,7 +148,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         while (res.moveToNext()){
             //Cursor starts counting at 0, since the name of the activity is saved at the
             // second position of the table it has to be 1
-            possibleActivityResultList.add(res.toString());
+            possibleActivityResultList.add(res.getString(1));
         }
         return possibleActivityResultList;
     }
@@ -158,8 +158,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //Update types for specific category
     public boolean updateTypeData (String tableName, String oldName, String newName){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        String id = new String();
         //Get id from activity type so it can be updated
-        String id = String.valueOf(sqLiteDatabase.rawQuery("select ID from" + tableName + "where Type = ?", new String[] {oldName} ));
+        Cursor res = sqLiteDatabase.rawQuery("select ID from " + tableName + " where Type = ?", new String[]{oldName});
+        while (res.moveToNext()){
+             id = res.getString(0);
+        }
 
         //Update name
         ContentValues contentValues = new ContentValues();
@@ -186,5 +190,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return true;
     }
+
 }
 

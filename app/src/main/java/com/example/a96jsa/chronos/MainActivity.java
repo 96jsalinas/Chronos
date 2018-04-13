@@ -96,8 +96,9 @@ public class MainActivity extends AppCompatActivity {
                // databaseHelper.createCategoryTable(category.getText().toString());
                // databaseHelper.insertCategoryTypes("Category", category.getText().toString());
                // databaseHelper.deleteCategory(category.getText().toString());
-               // databaseHelper.updateTypeData("Category", "yesyes", category.getText().toString());
-                databaseHelper.insertActivityData("Swimming", "17:00", "18:00", "45", "12.04.18");
+                databaseHelper.updateTypeData("Category", "Work", "Random");
+                //databaseHelper.insertActivityData("Swimming", "17:00", "18:00", "45", "12.04.18");
+
             }
         });
 
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         showCategories.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               ArrayList <String> arrayList = databaseHelper.showPossibleActivities("Activity");
+               ArrayList <String> arrayList = databaseHelper.getCategories();
                 buffer = arrayList.toString();
                 showMessage(buffer);
             }
