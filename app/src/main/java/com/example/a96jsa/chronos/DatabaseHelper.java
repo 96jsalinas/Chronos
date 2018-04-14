@@ -30,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private final static String Activity_COL4 = "endTime";
     private final static String Activity_COL5 = "totalTime";
     private final static String Activity_COL6 = "date";
+    private final static String Activity_COL7 = "category";
 
     //Category table
     private final static String CATEGORY_TABLE = "Category";
@@ -52,11 +53,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, 1);
 
     }
+    SQLiteDatabase db;
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("create table "+ ACTIVITY_TABLE +"(ID INTEGER PRIMARY KEY AUTOINCREMENT, activityName TEXT, " +
-                "startTime TEXT, endTime TEXT, totalTime TEXT, date TEXT)");
+                "startTime TEXT, endTime TEXT, totalTime TEXT, date TEXT, category TEXT)");
 
         sqLiteDatabase.execSQL("create table "+ CATEGORY_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
 
@@ -88,19 +90,53 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public ArrayList<String> getActivities(String category){
-        return this.showPossibleActivities(category);
+//    public ArrayList<String> getActivities(String category){
+//        return this.showPossibleActivities(category);
+//    }
+        public int getCategoryTotalTime(String category){
+        db = this.getWritableDatabase();
+            String[] columns = {"category,totalTime"};
+            String selection = "category = ?";
+            String[] selectionArgs = {category};
+            Cursor cursor = db.query(ACTIVITY_TABLE,columns,selection,selectionArgs,null,null,null);
+            int totalCategoryTime = 0;
+
+            while(cursor.moveToNext()){
+
+                int cursorTime = Integer.parseInt(cursor.getString(1));
+                totalCategoryTime += cursorTime;
+
+            }
+
+        return totalCategoryTime;
+        }
+        public ArrayList<String> getActivities(String category){
+            ArrayList<String> activities = new ArrayList<>();
+             db = this.getWritableDatabase();
+            String[] columns = {"activityName,category"};
+            String selection = "category = ?";
+            String[] selectionArgs = {category};
+          Cursor cursor = db.query(ACTIVITY_TABLE,columns,selection,selectionArgs,null,null,null);
+
+
+            while(cursor.moveToNext()){
+                activities.add(cursor.getString(0));
+            }
+            return activities;
     }
 
     //Insert activity values
-    public boolean insertActivityData(String activityName, String starTime, String endTime, String totalTime, String date){
+    public boolean insertActivityData(String category,String activityName, String starTime, String endTime, String totalTime, String date){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(Activity_COL2, activityName);
         contentValues.put(Activity_COL3, starTime);
         contentValues.put(Activity_COL4, endTime);
         contentValues.put(Activity_COL5, totalTime);
         contentValues.put(Activity_COL6, date);
+        contentValues.put(Activity_COL7, category);
         //insert returns -1 if it failed, so it is possible to check this way if it did work
         long result = sqLiteDatabase.insert(ACTIVITY_TABLE, null, contentValues);
 
@@ -132,6 +168,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.close();
         return true;
     }
+
+
 
     public ArrayList<String> getCategories(){
         return this.showPossibleActivities(CATEGORY_TABLE);

@@ -11,10 +11,14 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainScreen extends AppCompatActivity {
 
@@ -31,6 +35,13 @@ public class MainScreen extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_apps_black_24dp);
+
+        //spinner
+        DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
+        ArrayList<String> categoriesArrayList = databaseHelper.getCategories();
+        Spinner categoriesSpinner = (Spinner)findViewById(R.id.categories);
+        ArrayAdapter<String> categoriesSpinnerAdapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_spinner_dropdown_item,categoriesArrayList);
+        categoriesSpinner.setAdapter(categoriesSpinnerAdapter);
 
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
