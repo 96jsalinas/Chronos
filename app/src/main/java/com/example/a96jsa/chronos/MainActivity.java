@@ -53,12 +53,14 @@ public class MainActivity extends AppCompatActivity {
                         if(id == R.id.dynamic_text_example){
                             Intent dynIntent = new Intent(getBaseContext(),ExampleDynamicText.class);
                             startActivity(dynIntent);
-                        }else{
+                        }else {
                             Intent homeIntent = new Intent(getBaseContext(),MainScreen.class);
                             startActivity(homeIntent);
                         }
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
+                        if (id == R.id.categories){
+                            Intent catIntent = new Intent(getBaseContext(), CategoryActivity.class);
+                            startActivity(catIntent);
+                        }
 
                         return true;
                     }

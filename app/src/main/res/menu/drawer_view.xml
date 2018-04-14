@@ -10,5 +10,9 @@
         android:id="@+id/dynamic_text_example"
         android:icon="@android:drawable/ic_menu_view"
         android:title="Dynamic text example" />
+    <item
+        android:id="@+id/categories"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="Categories" />
 
 </menu>
