@@ -125,6 +125,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return activities;
     }
 
+
     //Insert activity values
     public boolean insertActivityData(String category,String activityName, String starTime, String endTime, String totalTime, String date){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
