@@ -72,6 +72,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("INSERT or replace INTO Category (Type) VALUES('Work')");
         sqLiteDatabase.execSQL("INSERT or replace INTO Category (Type) VALUES('Housework')");
         sqLiteDatabase.execSQL("INSERT or replace INTO Category (Type) VALUES('Leisure')");
+
+        sqLiteDatabase.execSQL("INSERT or replace INTO Sport (Type) VALUES('Running')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Sport (Type) VALUES('Walking')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Sport (Type) VALUES('Swimming')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Sport (Type) VALUES('Gym')");
+
+        sqLiteDatabase.execSQL("INSERT or replace INTO Work (Type) VALUES('Studying')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Work (Type) VALUES('Writing')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Work (Type) VALUES('Exercices')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Work (Type) VALUES('Lecture recap')");
+
+        sqLiteDatabase.execSQL("INSERT or replace INTO Housework (Type) VALUES('Cleaning')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Housework (Type) VALUES('Cooking')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Housework (Type) VALUES('Laundry')");
+
+        sqLiteDatabase.execSQL("INSERT or replace INTO Leisure (Type) VALUES('TV')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Leisure (Type) VALUES('Reading')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Leisure (Type) VALUES('Gaming')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Leisure (Type) VALUES('Sleeping')");
     }
 
 
@@ -110,6 +129,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
         }
 
+    }
+
+    //Check if activity for the specific category exists
+    public boolean checkActivity (String tableName, String activityName){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        Cursor res = sqLiteDatabase.rawQuery("select * from " + tableName, null);
+        ArrayList<String> activities = new ArrayList<String>();
+        while (res.moveToNext()){
+            activities.add(res.getString(1));
+        }
+
+        if (activities.contains(activityName)){
+            return false;
+        } else {
+            insertCategoryTypes(tableName, activityName);
+        }
+        return true;
     }
 
     //Insert category specific types, this methods needs also be called when a new category is created
