@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".ExampleDynamicText"></activity>
         <activity android:name=".CategoryActivity"></activity>
+
+        <activity android:name=".Activity"></activity>
     </application>
 
 </manifest>

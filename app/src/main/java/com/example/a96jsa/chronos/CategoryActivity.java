@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -17,12 +18,14 @@ public class CategoryActivity extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
         final DatabaseHelper databaseHelper = new DatabaseHelper(this);
         listView = findViewById(R.id.listview);
+
 
         final ArrayList<String> categoryList = databaseHelper.getCategories();
 
@@ -37,6 +40,7 @@ public class CategoryActivity extends AppCompatActivity {
 
              ArrayList<String> activitiyList = databaseHelper.showPossibleActivities((String) listView.getItemAtPosition(i));
 
+
                  showActivities(activitiyList);
              }
 
@@ -47,11 +51,9 @@ public class CategoryActivity extends AppCompatActivity {
     }
 
     public void showActivities (ArrayList<String> arrayList){
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_expandable_list_item_1,
-                arrayList);
-
-        listView.setAdapter(arrayAdapter);
+        Intent intent = new Intent(this, Activity.class);
+        intent.putStringArrayListExtra("Activities", arrayList);
+        startActivity(intent);
 
 
     }
