@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private final static String DATABASE_NAME = "Chronos.db";
 
-   //Activity table
+   //ActivityTypeActivity table
     private final static String ACTIVITY_TABLE = "Activity";
     private final static String Acitivity_COL1 = "ID";
     private final static String Activity_COL2 = "activityName";
@@ -111,7 +111,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return this.showPossibleActivities(category);
     }
 
-    //Insert activity values
+    //Insert activity_activity_type values
     public boolean insertActivityData(String activityName, String starTime, String endTime, String totalTime, String date){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -131,7 +131,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    //Check if activity for the specific category exists
+    //Check if activity_activity_type for the specific category exists
     public boolean checkActivity (String tableName, String activityName){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         Cursor res = sqLiteDatabase.rawQuery("select * from " + tableName, null);
@@ -199,7 +199,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //Transform Cursor into ArrayList with type String
         ArrayList<String> possibleActivityResultList = new ArrayList<String>();
         while (res.moveToNext()){
-            //Cursor starts counting at 0, since the name of the activity is saved at the
+            //Cursor starts counting at 0, since the name of the activity_activity_type is saved at the
             // second position of the table it has to be 1
             possibleActivityResultList.add(res.getString(1));
         }
@@ -212,7 +212,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean updateTypeData (String tableName, String oldName, String newName){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         String id = new String();
-        //Get id from activity type so it can be updated
+        //Get id from activity_activity_type type so it can be updated
         Cursor res = sqLiteDatabase.rawQuery("select ID from " + tableName + " where Type = ?", new String[]{oldName});
         while (res.moveToNext()){
              id = res.getString(0);

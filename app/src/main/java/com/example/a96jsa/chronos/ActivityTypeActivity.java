@@ -3,19 +3,21 @@ package com.example.a96jsa.chronos;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class Activity extends AppCompatActivity {
+public class ActivityTypeActivity extends AppCompatActivity {
 
     ListView listView;
     ArrayList<String> activityList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category);
+        setContentView(R.layout.activity_activity_type);
         final DatabaseHelper databaseHelper = new DatabaseHelper(this);
         listView = findViewById(R.id.listview);
 
@@ -27,5 +29,19 @@ public class Activity extends AppCompatActivity {
                 activityList);
 
         listView.setAdapter(arrayAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                backToHome();
+            }
+        });
+
     }
+
+    private void backToHome() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
 }

@@ -26,7 +26,7 @@
         <activity android:name=".ExampleDynamicText"></activity>
         <activity android:name=".CategoryActivity"></activity>
 
-        <activity android:name=".Activity"></activity>
+        <activity android:name=".ActivityTypeActivity"></activity>
     </application>
 
 </manifest>

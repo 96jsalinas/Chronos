@@ -1,6 +1,5 @@
 package com.example.a96jsa.chronos;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +7,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -34,6 +32,8 @@ public class CategoryActivity extends AppCompatActivity {
                 categoryList);
         listView.setAdapter(arrayAdapter);
      listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
          @Override
          public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -51,11 +51,12 @@ public class CategoryActivity extends AppCompatActivity {
     }
 
     public void showActivities (ArrayList<String> arrayList){
-        Intent intent = new Intent(this, Activity.class);
+        Intent intent = new Intent(this, ActivityTypeActivity.class);
         intent.putStringArrayListExtra("Activities", arrayList);
         startActivity(intent);
 
 
     }
+
 
 }
