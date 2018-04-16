@@ -9,22 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="16dp">
+        tools:layout_editor_absoluteY="0dp">
 
-        <TextView
+        <!--<TextView
             android:id="@+id/addCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="Add category:" />
-
-        <EditText
-            android:id="@+id/enterCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/addCategory"
-            android:ems="10"
-            android:inputType="textPersonName" />
 
         <Button
             android:id="@+id/categoryButton"
@@ -32,56 +24,69 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/enterCategory"
             android:text="add category" />
+            -->
 
         <TextView
             android:id="@+id/addActivityType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="192dp"
-            android:text="Enter type of activity for specific category below:" />
+            android:layout_alignStart="@+id/enterCategoryType"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="87dp"
+            android:text="Enter category and/or activity" />
 
-        <TextView
+
+        <EditText
+            android:id="@+id/enterCategoryType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/enterActivityType"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="25dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="category name" />
+
+        <!--<TextView
+            android:id="@+id/activityType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/addActivityType"
+            android:layout_marginTop="146dp"
+            android:text="Activity name" />
+
+             <TextView
             android:id="@+id/categoryType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/enterActivityType"
             android:layout_alignParentStart="true"
             android:text="Category:" />
-
-        <EditText
-            android:id="@+id/enterCategoryType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/categoryType"
-            android:layout_toEndOf="@+id/activityType"
-            android:ems="10"
-            android:inputType="textPersonName" />
-
-        <TextView
-            android:id="@+id/activityType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="Type of activity:" />
+            -->
 
         <EditText
             android:id="@+id/enterActivityType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/activityType"
-            android:layout_toEndOf="@+id/activityType"
+            android:layout_above="@+id/actitvityTypeButton"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="68dp"
+            android:layout_marginStart="73dp"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:text="activity name" />
 
         <Button
             android:id="@+id/actitvityTypeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="201dp"
-            android:text="add category specific activity" />
+            android:layout_alignStart="@+id/addActivityType"
+            android:layout_marginBottom="103dp"
+            android:layout_marginStart="13dp"
+            android:text="add" />
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

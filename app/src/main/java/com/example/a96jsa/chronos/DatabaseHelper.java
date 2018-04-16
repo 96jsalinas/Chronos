@@ -131,22 +131,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    //Check if activity_activity_type for the specific category exists
-    public boolean checkActivity (String tableName, String activityName){
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        Cursor res = sqLiteDatabase.rawQuery("select * from " + tableName, null);
-        ArrayList<String> activities = new ArrayList<String>();
-        while (res.moveToNext()){
-            activities.add(res.getString(1));
-        }
 
-        if (activities.contains(activityName)){
-            return false;
-        } else {
-            insertCategoryTypes(tableName, activityName);
-        }
-        return true;
-    }
 
     //Insert category specific types, this methods needs also be called when a new category is created
     public boolean insertCategoryTypes (String tableName, String typeName){
@@ -163,18 +148,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //Check if category exists already exists
     public boolean checkCategory (String categoryName){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        Cursor res = sqLiteDatabase.rawQuery("select * from " + CATEGORY_TABLE, null);
+        Cursor res = sqLiteDatabase.rawQuery("SELECT * FROM sqlite_master", null);
         ArrayList<String> categories = new ArrayList<String>();
+        boolean isCategoryPresent = false;
         while (res.moveToNext()){
             categories.add(res.getString(1));
         }
         if (categories.contains(categoryName)){
-            return false;
+            isCategoryPresent = true;
+
         }
         else {
-            createCategoryTable(categoryName);
-            insertCategoryTypes(CATEGORY_TABLE, categoryName);
+//            createCategoryTable(categoryName);
+//            insertCategoryTypes(CATEGORY_TABLE, categoryName);
+            isCategoryPresent = false;
         }
+        return isCategoryPresent;
+
+    }
+    //Check if activity_activity_type for the specific category exists
+    public boolean checkActivity (String tableName, String activityName){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        Cursor res = sqLiteDatabase.rawQuery("select * from " + tableName, null);
+        ArrayList<String> activities = new ArrayList<String>();
+        while (res.moveToNext()){
+            activities.add(res.getString(1));
+        }
+
+        if (activities.contains(activityName)){
+            return false;
+           }
+//          else {
+//            insertCategoryTypes(tableName, activityName);
+//        }
         return true;
     }
 
