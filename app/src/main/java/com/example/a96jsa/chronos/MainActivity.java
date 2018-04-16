@@ -61,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
                             Intent catIntent = new Intent(getBaseContext(), CategoryActivity.class);
                             startActivity(catIntent);
                         }
+                        if (id == R.id.customize){
+                            Intent custIntent = new Intent(getBaseContext(), CustomizeActivity.class);
+                            startActivity(custIntent);
+                        }
 
                         return true;
                     }

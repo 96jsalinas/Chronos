@@ -14,5 +14,9 @@
         android:id="@+id/categories"
         android:icon="@android:drawable/ic_menu_view"
         android:title="Categories" />
+    <item
+        android:id="@+id/customize"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="Customize" />
 
 </menu>
