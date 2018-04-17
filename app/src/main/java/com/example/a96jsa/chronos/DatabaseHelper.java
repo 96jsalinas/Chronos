@@ -192,8 +192,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
+//    public ArrayList<String> getCategories(){
+//        return this.showPossibleActivities(CATEGORY_TABLE);
+//    }
+
     public ArrayList<String> getCategories(){
-        return this.showPossibleActivities(CATEGORY_TABLE);
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        //Get results from query and save them in a cursor
+        Cursor res = sqLiteDatabase.rawQuery("SELECT * FROM sqlite_master WHERE type='table' AND name!='android_metadata' AND name!='sqlite_sequence'", null);
+
+        //Transform Cursor into ArrayList with type String
+        ArrayList<String> possibleActivityResultList = new ArrayList<String>();
+        while (res.moveToNext()){
+            //Cursor starts counting at 0, since the name of the activity_activity_type is saved at the
+            // second position of the table it has to be 1
+            possibleActivityResultList.add(res.getString(1));
+        }
+        return possibleActivityResultList;
     }
     //Show possible activities or categories
    public ArrayList<String> showPossibleActivities (String tableName){

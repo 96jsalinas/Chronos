@@ -7,12 +7,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class ActivityTypeActivity extends AppCompatActivity {
 
     ListView listView;
+    String categoryName;
+    TextView category_tv;
     ArrayList<String> activityList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,9 +23,14 @@ public class ActivityTypeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_activity_type);
         final DatabaseHelper databaseHelper = new DatabaseHelper(this);
         listView = findViewById(R.id.listview);
+        category_tv = (TextView) findViewById(R.id.category_tv);
 
         Intent intent = getIntent();
-        activityList = intent.getStringArrayListExtra("Activities");
+        Bundle extras = getIntent().getExtras();
+
+        categoryName = extras.getString("categoryName");
+        category_tv.setText(categoryName);
+       activityList = databaseHelper.getActivities(categoryName);
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_expandable_list_item_1,

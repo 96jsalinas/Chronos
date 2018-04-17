@@ -50,21 +50,38 @@ public class MainActivity extends AppCompatActivity {
                         // set item as selected to persist highlight
                         menuItem.setChecked(true);
                         int id = menuItem.getItemId();
-                        if(id == R.id.dynamic_text_example){
-                            Intent dynIntent = new Intent(getBaseContext(),ExampleDynamicText.class);
-                            startActivity(dynIntent);
-                        }else {
-                            Intent homeIntent = new Intent(getBaseContext(),MainScreen.class);
-                            startActivity(homeIntent);
+                        switch(id){
+                            case R.id.dynamic_text_example:
+                                Intent dynIntent = new Intent(getBaseContext(),ExampleDynamicText.class);
+                                startActivity(dynIntent);
+                            case R.id.categories:
+                                Intent catIntent = new Intent(getBaseContext(), CategoryActivity.class);
+                                startActivity(catIntent);
+                                break;
+                            case R.id.customize:
+                                Intent custIntent = new Intent(getBaseContext(), CustomizeActivity.class);
+                                startActivity(custIntent);
+                                break;
+                            default:
+                                Intent homeIntent = new Intent(getBaseContext(),MainActivity.class);
+                                startActivity(homeIntent);
+                                break;
                         }
-                        if (id == R.id.categories){
-                            Intent catIntent = new Intent(getBaseContext(), CategoryActivity.class);
-                            startActivity(catIntent);
-                        }
-                        if (id == R.id.customize){
-                            Intent custIntent = new Intent(getBaseContext(), CustomizeActivity.class);
-                            startActivity(custIntent);
-                        }
+//                        if(id == R.id.dynamic_text_example){
+//                            Intent dynIntent = new Intent(getBaseContext(),ExampleDynamicText.class);
+//                            startActivity(dynIntent);
+//                        }else {
+//                            Intent homeIntent = new Intent(getBaseContext(),MainScreen.class);
+//                            startActivity(homeIntent);
+//                        }
+//                        if (id == R.id.categories){
+//                            Intent catIntent = new Intent(getBaseContext(), CategoryActivity.class);
+//                            startActivity(catIntent);
+//                        }
+//                        if (id == R.id.customize){
+//                            Intent custIntent = new Intent(getBaseContext(), CustomizeActivity.class);
+//                            startActivity(custIntent);
+//                        }
 
                         return true;
                     }
