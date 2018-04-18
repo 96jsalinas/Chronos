@@ -18,5 +18,9 @@
         android:id="@+id/customize"
         android:icon="@android:drawable/ic_menu_view"
         android:title="Customize" />
+    <item
+        android:id="@+id/recording"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="Customize" />
 
 </menu>

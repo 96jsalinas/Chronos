@@ -33,15 +33,15 @@ public class ActivityTypeActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                backToHome();
+                backToHome((String) listView.getItemAtPosition(i));
             }
         });
 
     }
 
-    private void backToHome() {
-        Intent intent = new Intent(this, MainActivity.class);
+    private void backToHome(String activity) {
+        Intent intent = new Intent(this, RecordingActivity.class);
+        intent.putExtra("Activity", activity);
         startActivity(intent);
     }
-
 }

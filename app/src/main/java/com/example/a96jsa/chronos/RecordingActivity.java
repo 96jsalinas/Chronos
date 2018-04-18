@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+public class RecordingActivity extends AppCompatActivity {
 
     private boolean recording = false;
     private DrawerLayout mDrawerLayout;
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_recording);
         databaseHelper = new DatabaseHelper(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -46,42 +46,19 @@ public class MainActivity extends AppCompatActivity {
 
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        // set item as selected to persist highlight
-                        menuItem.setChecked(true);
-                        int id = menuItem.getItemId();
-                        if(id == R.id.dynamic_text_example){
-                            Intent dynIntent = new Intent(getBaseContext(),ExampleDynamicText.class);
-                            startActivity(dynIntent);
-                        }else {
-                            Intent homeIntent = new Intent(getBaseContext(),MainScreen.class);
-                            startActivity(homeIntent);
-                        }
-                        if (id == R.id.categories){
-                            Intent catIntent = new Intent(getBaseContext(), CategoryActivity.class);
-                            startActivity(catIntent);
-                        }
-                        if (id == R.id.customize){
-                            Intent custIntent = new Intent(getBaseContext(), CustomizeActivity.class);
-                            startActivity(custIntent);
-                        }
-
-                        return true;
-                    }
-                });
 
 
-        final EditText category = findViewById(R.id.category);
+        Intent intent = getIntent();
+        final String activityType = intent.getExtras().getString("Activity");
+        final TextView textView = findViewById(R.id.textViewToRecord);
+        textView.setText(intent.getExtras().getString("Activity"));
+
         final Button button = findViewById(R.id.record);
         final Chronometer simpleChronometer = findViewById(R.id.simpleChronometer);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(!recording) {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Starting recording in category: " + category.getText().toString(), Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplicationContext(), "Starting recording: " + activityType, Toast.LENGTH_SHORT);
                     toast.show();
                     recording = true;
                     simpleChronometer.setBase(SystemClock.elapsedRealtime());
@@ -97,9 +74,16 @@ public class MainActivity extends AppCompatActivity {
                     Date c = Calendar.getInstance().getTime();
                     SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
                     String formattedDate = df.format(c);
-                   // Toast toast = Toast.makeText(getApplicationContext(), "Elapsed time (ms): " + elapsedMillis, Toast.LENGTH_SHORT);
-                   // toast.show();
-                    storeData(totalTime, formattedDate);
+                    // Toast toast = Toast.makeText(getApplicationContext(), "Elapsed time (ms): " + elapsedMillis, Toast.LENGTH_SHORT);
+                    // toast.show();
+                    boolean check = databaseHelper.insertActivityData(activityType, totalTime,formattedDate);
+                    if (check == true){
+                        Toast toast = Toast.makeText(getApplicationContext(), "Stored activity details: " + activityType+" "+totalTime+" "+formattedDate, Toast.LENGTH_LONG);
+                        toast.show();
+                    } else {
+                        Toast toast = Toast.makeText(getApplicationContext(), "Upps, there went something wrong!", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
 
                     recording = false;
                     button.setText("Start recording");
@@ -107,36 +91,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        storeButton = findViewById(R.id.storeData);
-        storeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String activity = "babla";
-               boolean check = databaseHelper.checkCategory(activity);
-               // databaseHelper.insertCategoryTypes("Category", category.getText().toString());
-               // databaseHelper.deleteCategory(category.getText().toString());
-               // databaseHelper.updateTypeData("Category", "Work", "Random");
-                //databaseHelper.insertActivityData("Swimming", "17:00", "18:00", "45", "12.04.18");
-                if (check == true){
-                    Toast toast = Toast.makeText(getApplicationContext(), "Category " +activity+" is created", Toast.LENGTH_LONG);
-                    toast.show();
-                } else {
-                    Toast toast = Toast.makeText(getApplicationContext(), "The category " +activity+"  already exists", Toast.LENGTH_LONG);
-                    toast.show();
-                }
 
-            }
-        });
 
-        showCategories = findViewById(R.id.showCategories);
-        showCategories.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               ArrayList <String> arrayList = databaseHelper.getCategories();
-                buffer = arrayList.toString();
-                showMessage(buffer);
-            }
-        });
+
 
     }
 
@@ -144,8 +101,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String activityType = intent.getExtras().getString("Activity");
 
-        final TextView textView = findViewById(R.id.textViewToRecord);
-        textView.setText(intent.getExtras().getString("Activity"));
+
         boolean check = databaseHelper.insertActivityData(activityType, totalTime,formattedDate);
         if (check == true){
             Toast toast = Toast.makeText(getApplicationContext(), "Stored activity details: " + activityType+" "+totalTime+" "+formattedDate, Toast.LENGTH_LONG);
@@ -178,4 +134,3 @@ public class MainActivity extends AppCompatActivity {
 
 
 }
-

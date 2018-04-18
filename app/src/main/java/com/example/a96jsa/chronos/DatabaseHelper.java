@@ -26,10 +26,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private final static String ACTIVITY_TABLE = "Activity";
     private final static String Acitivity_COL1 = "ID";
     private final static String Activity_COL2 = "activityName";
-    private final static String Activity_COL3 = "startTime";
-    private final static String Activity_COL4 = "endTime";
-    private final static String Activity_COL5 = "totalTime";
-    private final static String Activity_COL6 = "date";
+    private final static String Activity_COL3 = "totalTime";
+    private final static String Activity_COL4 = "date";
 
     //Category table
     private final static String CATEGORY_TABLE = "Category";
@@ -56,7 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("create table "+ ACTIVITY_TABLE +"(ID INTEGER PRIMARY KEY AUTOINCREMENT, activityName TEXT, " +
-                "startTime TEXT, endTime TEXT, totalTime TEXT, date TEXT)");
+                " totalTime TEXT, date TEXT)");
 
         sqLiteDatabase.execSQL("create table "+ CATEGORY_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
 
@@ -112,14 +110,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Insert activity_activity_type values
-    public boolean insertActivityData(String activityName, String starTime, String endTime, String totalTime, String date){
+    public boolean insertActivityData(String activityName, String totalTime, String date){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(Activity_COL2, activityName);
-        contentValues.put(Activity_COL3, starTime);
-        contentValues.put(Activity_COL4, endTime);
-        contentValues.put(Activity_COL5, totalTime);
-        contentValues.put(Activity_COL6, date);
+        contentValues.put(Activity_COL3, totalTime);
+        contentValues.put(Activity_COL4, date);
         //insert returns -1 if it failed, so it is possible to check this way if it did work
         long result = sqLiteDatabase.insert(ACTIVITY_TABLE, null, contentValues);
 

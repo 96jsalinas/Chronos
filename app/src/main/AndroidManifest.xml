@@ -28,6 +28,7 @@
 
         <activity android:name=".ActivityTypeActivity"></activity>
         <activity android:name=".CustomizeActivity"></activity>
+        <activity android:name=".RecordingActivity"></activity>
     </application>
 
 </manifest>
