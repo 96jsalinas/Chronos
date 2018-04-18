@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
         final TextView textView = findViewById(R.id.textViewToRecord);
         textView.setText(intent.getExtras().getString("Activity"));
-        boolean check = databaseHelper.insertActivityData(activityType, totalTime,formattedDate);
+        boolean check = databaseHelper.insertActivityData(activityType, totalTime, "10:00", "11:00", formattedDate, "RED");
         if (check == true){
             Toast toast = Toast.makeText(getApplicationContext(), "Stored activity details: " + activityType+" "+totalTime+" "+formattedDate, Toast.LENGTH_LONG);
             toast.show();

@@ -27,7 +27,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private final static String Acitivity_COL1 = "ID";
     private final static String Activity_COL2 = "activityName";
     private final static String Activity_COL3 = "totalTime";
-    private final static String Activity_COL4 = "date";
+    private final static String Activity_COL4 = "startTime";
+    private final static String Activity_COL5 = "endTime";
+    private final static String Activity_COL6 = "date";
+    private final static String Activity_COL7 = "color";
 
     //Category table
     private final static String CATEGORY_TABLE = "Category";
@@ -53,42 +56,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("create table "+ ACTIVITY_TABLE +"(ID INTEGER PRIMARY KEY AUTOINCREMENT, activityName TEXT, " +
-                " totalTime TEXT, date TEXT)");
+        sqLiteDatabase.execSQL("create table "+ ACTIVITY_TABLE +"(ID INTEGER PRIMARY KEY AUTOINCREMENT, activityName TEXT, Color TEXT, " +
+                " startTime TEXT, endTime TEXT, totalTime TEXT, date TEXT)");
 
-        sqLiteDatabase.execSQL("create table "+ CATEGORY_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
+        sqLiteDatabase.execSQL("create table "+ CATEGORY_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT, Color TEXT)");
 
-        sqLiteDatabase.execSQL("create table "+ SPORT_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
+        sqLiteDatabase.execSQL("create table "+ SPORT_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT, Color TEXT)");
 
-        sqLiteDatabase.execSQL("create table "+ WORK_TABLE + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
+        sqLiteDatabase.execSQL("create table "+ WORK_TABLE + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT, Color TEXT)");
 
-        sqLiteDatabase.execSQL("create table "+ HOUSEWORK_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
+        sqLiteDatabase.execSQL("create table "+ HOUSEWORK_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT, Color TEXT)");
 
-        sqLiteDatabase.execSQL("create table "+ LEISURE_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
+        sqLiteDatabase.execSQL("create table "+ LEISURE_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT, Color TEXT)");
 
-        sqLiteDatabase.execSQL("INSERT or replace INTO Category (Type) VALUES('Sport')");
-        sqLiteDatabase.execSQL("INSERT or replace INTO Category (Type) VALUES('Work')");
-        sqLiteDatabase.execSQL("INSERT or replace INTO Category (Type) VALUES('Housework')");
-        sqLiteDatabase.execSQL("INSERT or replace INTO Category (Type) VALUES('Leisure')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Category (Type, Color) VALUES('Sport', 'RED')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Category (Type, Color) VALUES('Work', 'BLUE')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Category (Type, Color) VALUES('Housework', 'BLACK')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Category (Type, Color) VALUES('Leisure', 'YELLOW')");
 
-        sqLiteDatabase.execSQL("INSERT or replace INTO Sport (Type) VALUES('Running')");
-        sqLiteDatabase.execSQL("INSERT or replace INTO Sport (Type) VALUES('Walking')");
-        sqLiteDatabase.execSQL("INSERT or replace INTO Sport (Type) VALUES('Swimming')");
-        sqLiteDatabase.execSQL("INSERT or replace INTO Sport (Type) VALUES('Gym')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Sport (Type, Color) VALUES('Running', 'RED')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Sport (Type, Color) VALUES('Walking', 'BLUE')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Sport (Type, Color) VALUES('Swimming', 'BACK')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Sport (Type, Color) VALUES('Gym', 'YELLOW')");
 
-        sqLiteDatabase.execSQL("INSERT or replace INTO Work (Type) VALUES('Studying')");
-        sqLiteDatabase.execSQL("INSERT or replace INTO Work (Type) VALUES('Writing')");
-        sqLiteDatabase.execSQL("INSERT or replace INTO Work (Type) VALUES('Exercices')");
-        sqLiteDatabase.execSQL("INSERT or replace INTO Work (Type) VALUES('Lecture recap')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Work (Type, Color) VALUES('Studying', 'RED')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Work (Type, Color) VALUES('Writing', 'BLUE')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Work (Type, Color) VALUES('Exercices', 'BLACK')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Work (Type, Color) VALUES('Lecture recap', 'YELLOW')");
 
-        sqLiteDatabase.execSQL("INSERT or replace INTO Housework (Type) VALUES('Cleaning')");
-        sqLiteDatabase.execSQL("INSERT or replace INTO Housework (Type) VALUES('Cooking')");
-        sqLiteDatabase.execSQL("INSERT or replace INTO Housework (Type) VALUES('Laundry')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Housework (Type, Color) VALUES('Cleaning', 'RED')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Housework (Type, Color) VALUES('Cooking', 'BLUE')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Housework (Type, Color) VALUES('Laundry', 'BLACK')");
 
-        sqLiteDatabase.execSQL("INSERT or replace INTO Leisure (Type) VALUES('TV')");
-        sqLiteDatabase.execSQL("INSERT or replace INTO Leisure (Type) VALUES('Reading')");
-        sqLiteDatabase.execSQL("INSERT or replace INTO Leisure (Type) VALUES('Gaming')");
-        sqLiteDatabase.execSQL("INSERT or replace INTO Leisure (Type) VALUES('Sleeping')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Leisure (Type, Color) VALUES('TV', 'RED')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Leisure (Type, Color) VALUES('Reading', 'BLUE')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Leisure (Type, Color) VALUES('Gaming', 'BLACK')");
+        sqLiteDatabase.execSQL("INSERT or replace INTO Leisure (Type, Color) VALUES('Sleeping', 'YELLOW')");
     }
 
 
@@ -110,12 +113,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Insert activity_activity_type values
-    public boolean insertActivityData(String activityName, String totalTime, String date){
+    public boolean insertActivityData(String activityName,  String totalTime, String startTime, String endTime, String date, String color){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(Activity_COL2, activityName);
         contentValues.put(Activity_COL3, totalTime);
-        contentValues.put(Activity_COL4, date);
+        contentValues.put(Activity_COL4, startTime);
+        contentValues.put(Activity_COL5, endTime);
+        contentValues.put(Activity_COL6, date);
+        contentValues.put(Activity_COL7, color);
         //insert returns -1 if it failed, so it is possible to check this way if it did work
         long result = sqLiteDatabase.insert(ACTIVITY_TABLE, null, contentValues);
 
@@ -130,10 +136,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     //Insert category specific types, this methods needs also be called when a new category is created
-    public boolean insertCategoryTypes (String tableName, String typeName){
+    public boolean insertCategoryTypes (String tableName, String typeName, String color){
         SQLiteDatabase sqLiteOpenHelper = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("Type", typeName);
+        contentValues.put("Color", color);
         long result = sqLiteOpenHelper.insert(tableName, null, contentValues);
         if (result == -1){
             return false;
@@ -183,7 +190,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //Generate table for new category
     public boolean createCategoryTable(String categoryName){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        sqLiteDatabase.execSQL("create table "+ categoryName + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT)");
+        sqLiteDatabase.execSQL("create table "+ categoryName + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT, Color TEXT)");
         sqLiteDatabase.close();
         return true;
     }

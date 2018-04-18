@@ -31,6 +31,8 @@ public class RecordingActivity extends AppCompatActivity {
     private Button storeButton;
     private String buffer;
     private Button showCategories;
+    public String starTime;
+    public String endTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +66,16 @@ public class RecordingActivity extends AppCompatActivity {
                     simpleChronometer.setBase(SystemClock.elapsedRealtime());
                     simpleChronometer.start();
                     button.setText("Stop recording");
+                    Calendar calendar = Calendar.getInstance();
+                    SimpleDateFormat timeDateFormat = new SimpleDateFormat("HH:mm:ss");
+                    starTime = timeDateFormat.format(calendar.getTime());
 
                 }else {
                     simpleChronometer.stop();
                     long elapsedMillis = SystemClock.elapsedRealtime() - simpleChronometer.getBase();
-
+                    Calendar calendar = Calendar.getInstance();
+                    SimpleDateFormat timeDateFormat = new SimpleDateFormat("HH:mm:ss");
+                    endTime = timeDateFormat.format(calendar.getTime());
                     //Stuff to enter into activity table, will be extracted into separate java class soon
                     String totalTime = Long.toString(elapsedMillis);
                     Date c = Calendar.getInstance().getTime();
@@ -76,9 +83,10 @@ public class RecordingActivity extends AppCompatActivity {
                     String formattedDate = df.format(c);
                     // Toast toast = Toast.makeText(getApplicationContext(), "Elapsed time (ms): " + elapsedMillis, Toast.LENGTH_SHORT);
                     // toast.show();
-                    boolean check = databaseHelper.insertActivityData(activityType, totalTime,formattedDate);
+
+                    boolean check = databaseHelper.insertActivityData(activityType, totalTime, starTime, endTime, formattedDate, "RED");
                     if (check == true){
-                        Toast toast = Toast.makeText(getApplicationContext(), "Stored activity details: " + activityType+" "+totalTime+" "+formattedDate, Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(getApplicationContext(), "Stored activity details: " + activityType+" "+totalTime+" "+formattedDate + " Start time: "+starTime+" End time: "+endTime, Toast.LENGTH_LONG);
                         toast.show();
                     } else {
                         Toast toast = Toast.makeText(getApplicationContext(), "Upps, there went something wrong!", Toast.LENGTH_LONG);
@@ -102,7 +110,7 @@ public class RecordingActivity extends AppCompatActivity {
         String activityType = intent.getExtras().getString("Activity");
 
 
-        boolean check = databaseHelper.insertActivityData(activityType, totalTime,formattedDate);
+        boolean check = databaseHelper.insertActivityData(activityType, totalTime, "10:00", "11:00", formattedDate, "RED");
         if (check == true){
             Toast toast = Toast.makeText(getApplicationContext(), "Stored activity details: " + activityType+" "+totalTime+" "+formattedDate, Toast.LENGTH_LONG);
             toast.show();

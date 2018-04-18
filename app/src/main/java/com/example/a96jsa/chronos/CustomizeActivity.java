@@ -47,6 +47,7 @@ public class CustomizeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String categoryString = addActivityTypeCategoryText.getText().toString();
                 String activityTypeString = addNewActivityType.getText().toString();
+                String color = "GREEN";
                 boolean checkCategory = databaseHelper.checkCategory(categoryString);
                 if(checkCategory == true){
                     boolean checkActivity = databaseHelper.checkActivity(categoryString, activityTypeString);
@@ -55,7 +56,7 @@ public class CustomizeActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "The  category " + categoryString + "has been created already, insert an activity ", Toast.LENGTH_LONG).show();
                             return;
                         }else {
-                            databaseHelper.insertCategoryTypes(categoryString, activityTypeString);
+                            databaseHelper.insertCategoryTypes(categoryString, activityTypeString, color);
                             Toast toast = Toast.makeText(getApplicationContext(), "The activity type " + activityTypeString +" has been added to " + categoryString, Toast.LENGTH_LONG);
                             toast.show();
                         }
@@ -79,7 +80,7 @@ public class CustomizeActivity extends AppCompatActivity {
                         }
 
                     }else {
-                        databaseHelper.insertCategoryTypes(categoryString,activityTypeString);
+                        databaseHelper.insertCategoryTypes(categoryString,activityTypeString, color);
                      Toast.makeText(getApplicationContext(), "The new activity " + activityTypeString+"  is created " + categoryString, Toast.LENGTH_LONG).show();
 
                     }
