@@ -98,7 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + CATEGORY_TABLE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ACTIVITY_TABLE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SPORT_TABLE);
@@ -194,6 +194,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.close();
         return true;
     }
+    //function for inserting the category name and color in the category table
+    public void insertCategorytoCategoryTable(String categoryName, String color){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues value = new ContentValues();
+        value.put("Type",categoryName);
+        value.put("Color",color);
+        sqLiteDatabase.insert(CATEGORY_TABLE,null,value);
+        sqLiteDatabase.close();
+    }
 
 //    public ArrayList<String> getCategories(){
 //        return this.showPossibleActivities(CATEGORY_TABLE);
@@ -219,7 +228,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
         //Get results from query and save them in a cursor
-        Cursor res = sqLiteDatabase.rawQuery("select * from " + tableName, null);
+        Cursor res = sqLiteDatabase.rawQuery("SELECT * FROM sqlite_master WHERE type='table' AND name!='android_metadata' AND name!='sqlite_sequence'", null);
 
         //Transform Cursor into ArrayList with type String
         ArrayList<String> possibleActivityResultList = new ArrayList<String>();
