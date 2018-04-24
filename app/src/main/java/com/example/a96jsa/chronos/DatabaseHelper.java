@@ -6,6 +6,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 
 
@@ -32,6 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private final static String Activity_COL6 = "date";
     private final static String Activity_COL7 = "color";
 
+
     //Category table
     private final static String CATEGORY_TABLE = "Category";
 
@@ -57,7 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("create table "+ ACTIVITY_TABLE +"(ID INTEGER PRIMARY KEY AUTOINCREMENT, activityName TEXT, Color TEXT, " +
-                " startTime TEXT, endTime TEXT, totalTime TEXT, date TEXT)");
+                " startTime TEXT, endTime TEXT, totalTime TEXT, date TEXT,recording INTEGER)");
 
         sqLiteDatabase.execSQL("create table "+ CATEGORY_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT, Color TEXT)");
 
@@ -189,6 +193,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Generate table for new category
     public boolean createCategoryTable(String categoryName){
+        categoryName = categoryName.replaceAll("\\s+","");
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         sqLiteDatabase.execSQL("create table "+ categoryName + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT, Color TEXT)");
         sqLiteDatabase.close();
@@ -203,6 +208,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.insert(CATEGORY_TABLE,null,value);
         sqLiteDatabase.close();
     }
+    public void insertActivityToActivityTable(String activityName, String color, String startTime, String endTime, String date){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues value = new ContentValues();
+        value.put("activityName", activityName);
+        value.put("Color",color);
+        value.put("startTime",startTime);
+        value.put("endTime",endTime);
+        value.put("date",date);
+        sqLiteDatabase.insert(CATEGORY_TABLE,null,value);
+        sqLiteDatabase.close();
+    }
+    public void insertActivityToActivityTable(String activityName){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("activityName", activityName);
+        values.put("Color","Red");
+        values.put("startTime","123");
+        values.put("endTime","123");
+        values.put("date","11-04-2018");
+        values.put("totalTime","100000");
+        sqLiteDatabase.insert(ACTIVITY_TABLE,null,values);
+        sqLiteDatabase.close();
+    }
 
 //    public ArrayList<String> getCategories(){
 //        return this.showPossibleActivities(CATEGORY_TABLE);
@@ -212,7 +240,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
         //Get results from query and save them in a cursor
-        Cursor res = sqLiteDatabase.rawQuery("SELECT * FROM sqlite_master WHERE type='table' AND name!='android_metadata' AND name!='sqlite_sequence'", null);
+        //Cursor res = sqLiteDatabase.rawQuery("SELECT * FROM sqlite_master WHERE type='table' AND name!='android_metadata' AND name!='sqlite_sequence'", null);
+        Cursor res = sqLiteDatabase.rawQuery("SELECT * FROM " + CATEGORY_TABLE, null);
 
         //Transform Cursor into ArrayList with type String
         ArrayList<String> possibleActivityResultList = new ArrayList<String>();
@@ -260,6 +289,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         return true;
+    }
+    //change recording state
+    public boolean updateRecordingState(String activityName, int recordingState){
+
+        ContentValues values = new ContentValues();
+        values.put("recording",recordingState);
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        int count = db.update(ACTIVITY_TABLE, values,"activityName = ?",new String[]{activityName}) ;
+        if(count > 0){
+            Log.d("CHRONOS","time changed");
+            return true;
+
+        }else {
+            return false;
+        }
     }
 
     //Delete types of activities / Category

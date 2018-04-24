@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="0dp">
 
         <!--<TextView
@@ -41,9 +41,9 @@
             android:id="@+id/enterCategoryType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/addActivityType"
+            android:layout_above="@+id/enterActivityType"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="61dp"
+            android:layout_marginBottom="20dp"
             android:ems="10"
             android:inputType="textPersonName"
             android:text="category name" />
@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/addActivityType"
-            android:layout_below="@+id/enterCategoryType"
+            android:layout_centerVertical="true"
             android:ems="10"
             android:inputType="textPersonName"
             android:text="activity name" />
@@ -90,8 +90,17 @@
             android:id="@+id/colorSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/actitvityTypeButton"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/enterActivityType" />
+            android:layout_marginBottom="32dp" />
+
+        <Spinner
+            android:id="@+id/categorySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/enterActivityType"
+            android:layout_marginTop="12dp" />
 
         <TextView
             android:id="@+id/textView"
@@ -101,6 +110,25 @@
             android:layout_alignStart="@+id/enterCategoryType"
             android:layout_marginBottom="18dp"
             android:text="TextView" />
+
+        <RadioButton
+            android:id="@+id/activity_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/textView"
+            android:layout_below="@+id/addActivityType"
+            android:layout_marginTop="23dp"
+            android:onClick="onRadioButtonClicked"
+            android:text="activity" />
+
+        <RadioButton
+            android:id="@+id/category_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/enterCategoryType"
+            android:layout_alignTop="@+id/activity_rb"
+            android:onClick="onRadioButtonClicked"
+            android:text="category" />
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

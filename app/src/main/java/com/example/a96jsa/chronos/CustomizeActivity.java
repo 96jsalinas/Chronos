@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -27,6 +28,17 @@ public class CustomizeActivity extends AppCompatActivity implements AdapterView.
     ArrayList<Integer> colorList;
     ArrayList<String>colorListString;
     String selectedColor;
+
+    //categorySpinner
+    Spinner categorySpinner;
+    ArrayList<String> categoryList;
+
+    //radio button
+    RadioButton categoryRb;
+    RadioButton activityRb;
+    boolean activityChecked;
+    boolean categoryChecked;
+    boolean currentRadioButtonChecked;
 
 
 
@@ -49,6 +61,10 @@ public class CustomizeActivity extends AppCompatActivity implements AdapterView.
         colorListString.add("YELLOW");
         colorListString.add("MAGENTA");
 
+
+
+        categoryRb = (RadioButton)findViewById(R.id.category_rb);
+        activityRb = (RadioButton)findViewById(R.id.activity_rb);
         //Fetching parts from the the XML file
         //addCategoryButton = findViewById(R.id.categoryButton);
         activityTypeButton = findViewById(R.id.actitvityTypeButton);
@@ -57,10 +73,25 @@ public class CustomizeActivity extends AppCompatActivity implements AdapterView.
         addNewActivityType = findViewById(R.id.enterActivityType);
         databaseHelper = new DatabaseHelper(this);
 
+        categoryList = databaseHelper.getCategories();
+        addActivityTypeCategoryText.setVisibility(View.INVISIBLE);
+        addNewActivityType.setVisibility(View.INVISIBLE);
+        addActivityTypeCategoryText.setText(null);
+        addNewActivityType.setText(null);
+
+
+        //spinner
         colorSpinner = (Spinner)findViewById(R.id.colorSpinner);
         ArrayAdapter<String> colorSpinnerArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,colorListString);
         colorSpinner.setAdapter(colorSpinnerArrayAdapter);
         colorSpinner.setOnItemSelectedListener(this);
+
+        //categorySpinner
+        categorySpinner = (Spinner)findViewById(R.id.categorySpinner);
+        ArrayAdapter<String> categorySpinnerArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,categoryList);
+        categorySpinner.setAdapter(categorySpinnerArrayAdapter);
+        categorySpinner.setVisibility(View.INVISIBLE);
+        //categorySpinner.setVisibility(View.INVISIBLE);
 
 
 //        addCategoryButton.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +108,7 @@ public class CustomizeActivity extends AppCompatActivity implements AdapterView.
 //            }
 //        });
 
+
         activityTypeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,12 +123,17 @@ public class CustomizeActivity extends AppCompatActivity implements AdapterView.
                             Toast.makeText(getApplicationContext(), "The  category " + categoryString + "has been created already, insert an activity ", Toast.LENGTH_LONG).show();
                             return;
                         }else {
+
                             databaseHelper.insertCategoryTypes(categoryString, activityTypeString, color);
+                            databaseHelper.insertActivityToActivityTable(activityTypeString);
+                            databaseHelper.updateRecordingState(activityTypeString,1);
+
                             Toast toast = Toast.makeText(getApplicationContext(), "The activity type " + activityTypeString +" has been added to " + categoryString, Toast.LENGTH_LONG);
                             toast.show();
                         }
 
                     } else {
+
                        Toast.makeText(getApplicationContext(), "The activity " + activityTypeString+"  already exists for " + categoryString, Toast.LENGTH_LONG).show();
                        return;
 
@@ -129,6 +166,37 @@ public class CustomizeActivity extends AppCompatActivity implements AdapterView.
         });
     }
 
+    public void onRadioButtonClicked(View view){
+        activityChecked = activityRb.isChecked();
+        categoryChecked = categoryRb.isChecked();
+        currentRadioButtonChecked = ((RadioButton)view).isChecked();
+
+        switch (view.getId()){
+            case R.id.category_rb:
+                if(currentRadioButtonChecked){
+                    activityRb.setChecked(false);
+                  addActivityTypeCategoryText.setVisibility(View.VISIBLE);
+                    addNewActivityType.setVisibility(View.INVISIBLE);
+                    addNewActivityType.setText(null);
+                    categorySpinner.setVisibility(View.INVISIBLE);
+//
+                Toast.makeText(getApplicationContext(),"category checked",Toast.LENGTH_SHORT).show();
+            }
+                break;
+            case R.id.activity_rb:
+                if(currentRadioButtonChecked){
+                    categoryRb.setChecked(false);
+                    addNewActivityType.setVisibility(View.VISIBLE);
+                   addActivityTypeCategoryText.setVisibility(View.INVISIBLE);
+                    categorySpinner.setVisibility(View.VISIBLE);
+
+                   addActivityTypeCategoryText.setText(null);
+                    Toast.makeText(getApplicationContext(),"activity checked",Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+        }
+    }
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
       selectedColor = adapterView.getSelectedItem().toString();
@@ -141,5 +209,10 @@ public class CustomizeActivity extends AppCompatActivity implements AdapterView.
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+    @Override
+    protected void onDestroy() {
+        databaseHelper.close();
+        super.onDestroy();
     }
 }
